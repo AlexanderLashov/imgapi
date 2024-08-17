@@ -54,4 +54,6 @@ if [ -z "$CI" ]; then
 fi
 echo "Setup complete. Your app is running and the HTML page should be open in your browser."
 
-tail -f app.log
+if [ -z "$CI" ]; then
+  tail -f app.log
+fi
