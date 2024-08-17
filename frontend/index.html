@@ -1,0 +1,212 @@
+<html>
+
+<body style="transform:scale(1.3); transform-origin: 0 0;">
+  <label>Upload images</label>
+  <form>
+    <input type="file" id="fileupload" name="files" multiple><br>
+  </form>
+  <button onclick="sendImages()">Submit</button>
+  <hr style="width: 700px; margin-left: 0px;">
+
+  <label>Get names of all images</label>
+  <button onclick="getImgList()">List all images</button><br><br>
+  <textarea id="returnedList" style="width: 500px;"></textarea><br>
+  <div id="imagelist"></div>
+  <hr style="width: 700px; margin-left: 0px;">
+
+  <label>Query one image by name</label>
+  <input type="text" id="imageName">
+  <button onclick="getOneImage()">Get image</button><br><br>
+  <textarea id="imgtoreturn" style="width: 500px;"></textarea><br>
+  <hr style="width: 700px; margin-left: 0px;">
+
+  <label>Delete multiple images by name</label><br>
+  <textarea id="imgtodelete" style="height: 200px; width: 500px;">{
+  "forDeletion":[ 
+
+
+  ]}</textarea><br>
+  <button onclick="deleteImages()">Delete images</button>
+  <hr style="width: 700px; margin-left: 0px;">
+
+  <label>Delete a single image by name</label><br>
+  <input type="text" style="width: 500px;" id="singleImageToDelete" placeholder="Enter image name"><br>
+  <button onclick="deleteSingleImage()">Delete Image</button>
+  <hr style="width: 700px; margin-left: 0px;">
+
+  <table>
+    <tr><label>Search images inside a geographical bounding box</label></tr>
+    <tr>
+      <th>Start</th>
+      <th></th>
+      <th>End</th>
+    </tr>
+    <tr>
+      <td>
+        <select id="latDirStart">
+          <option value="N">North</option>
+          <option value="S">South</option>
+        </select>
+      </td>
+      <td>
+        <input type="text" id="latDegStart" style="width: 30px;"> &#186;
+        <input type="text" id="latMinStart" style="width: 30px;"> &#180;
+        <input type="text" id="latSecStart" style="width: 60px;"> &#8220;
+      </td>
+      <td>
+        <select id="latDirEnd">
+          <option value="N">North</option>
+          <option value="S">South</option>
+        </select>
+      </td>
+      <td>
+        <input type="text" id="latDegEnd" style="width: 30px;"> &#186;
+        <input type="text" id="latMinEnd" style="width: 30px;"> &#180;
+        <input type="text" id="latSecEnd" style="width: 60px;"> &#8220;
+      </td>
+    </tr>
+    <br>
+    <br>
+    <tr>
+      <td>
+        <select id="lonDirStart">
+          <option value="W">West</option>
+          <option value="E">East</option>
+        </select>
+      </td>
+      <td>
+        <input type="text" id="lonDegStart" style="width: 30px;"> &#186;
+        <input type="text" id="lonMinStart" style="width: 30px;"> &#180;
+        <input type="text" id="lonSecStart" style="width: 60px;"> &#8220;
+      </td>
+      <td>
+        <select id="lonDirEnd">
+          <option value="W">West</option>
+          <option value="E">East</option>
+        </select>
+      </td>
+      <td>
+        <input type="text" id="lonDegEnd" style="width: 30px;"> &#186;
+        <input type="text" id="lonMinEnd" style="width: 30px;"> &#180;
+        <input type="text" id="lonSecEnd" style="width: 60px;"> &#8220;
+      </td>
+      <br>
+    </tr>
+  </table>
+  <button onclick="searchForImages()">Search images </button><br>
+  <textarea id="returnedListCoord" style="width: 500px;"></textarea><br>
+
+</body>
+
+<script>
+  async function sendImages() {
+    let imgs = document.getElementById("fileupload").files;
+    let formData = new FormData();
+    for (let i = 0; i < imgs.length; i++) {
+      formData.append("image", imgs[i]);
+    }
+    await fetch('http://localhost:3000/api/image-upload', {
+      method: "POST",
+      mode: 'no-cors',
+      body: formData
+    });
+    alert('Uploaded successfully!');
+  }
+
+  async function getImgList() {
+    document.getElementById('returnedList').innerHTML = '';
+
+    await fetch('http://127.0.0.1:3000/api/get-images')
+      .then((response) => response.json())
+      .then((data) => {
+        var dataArray = data.toString().split(",").join('",\n"');
+        document.getElementById('returnedList').innerHTML = '"' + dataArray + '"'
+      })
+  }
+
+  async function getOneImage() {
+    document.getElementById('imgtoreturn').innerHTML = '';
+    var reqimg = document.getElementById("imageName").value;
+
+    await fetch('http://127.0.0.1:3000/api/get-image/' + reqimg)
+      .then((response) => response.json())
+      .then((data) => {
+        var image = data.fullimg.toString();
+        var imageThumb = data.thmbimg.toString();
+
+        document.getElementById('imgtoreturn').innerHTML = image + '\n' + imageThumb
+      })
+  }
+
+  async function deleteImages() {
+    var todelete = document.getElementById("imgtodelete").value;
+
+    await fetch('http://127.0.0.1:3000/api/image-deletion/', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: todelete
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        alert("Request processed!")
+      })
+  }
+
+  // New function to delete a single image by name
+  async function deleteSingleImage() {
+    var imageName = document.getElementById("singleImageToDelete").value;
+
+    if (!imageName) {
+      alert("Please enter an image name.");
+      return;
+    }
+
+    var requestBody = {
+      "forDeletion": [imageName]
+    };
+
+    await fetch('http://127.0.0.1:3000/api/image-deletion/', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBody)
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        alert("Image deleted successfully!");
+      });
+  }
+
+  async function searchForImages() {
+    document.getElementById('returnedListCoord').innerHTML = '';
+    var latStart = document.getElementById("latDirStart").value + '_' +
+      document.getElementById("latDegStart").value + '_' +
+      document.getElementById("latMinStart").value + '_' +
+      document.getElementById("latSecStart").value;
+    var latEnd = document.getElementById("latDirEnd").value + '_' +
+      document.getElementById("latDegEnd").value + '_' +
+      document.getElementById("latMinEnd").value + '_' +
+      document.getElementById("latSecEnd").value;
+    var lonStart = document.getElementById("lonDirStart").value + '_' +
+      document.getElementById("lonDegStart").value + '_' +
+      document.getElementById("lonMinStart").value + '_' +
+      document.getElementById("lonSecStart").value;
+    var lonEnd = document.getElementById("lonDirEnd").value + '_' +
+      document.getElementById("lonDegEnd").value + '_' +
+      document.getElementById("lonMinEnd").value + '_' +
+      document.getElementById("lonSecEnd").value;
+
+    await fetch('http://localhost:3000/api/get-images-by-coordinates/?la1=' + latStart + '&la2=' + latEnd + '&lo1=' + lonStart + '&lo2=' + lonEnd).then((response) => response.json())
+      .then((data) => {
+        var dataArray = data.body.toString().split(",").join('",\n"');
+        document.getElementById('returnedListCoord').innerHTML = '"' + dataArray + '"'
+      })
+  }
+</script>
+
+</html>

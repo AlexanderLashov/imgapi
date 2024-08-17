@@ -1,0 +1,157 @@
+{
+	"info": {
+		"_postman_id": "a88e905b-42b2-4a96-9598-1452670f797a",
+		"name": "HTTPrequests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24313709"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3000/api/image-upload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": []
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/image-upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"image-upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/get-images-by-coordinates/?la1=S_10_11_12&la2=N_18_13_47&lo1=W_42_20_00&lo2=E_42_00_00",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/get-images-by-coordinates/?la1=N_53_52_00&la2=N_54_0_00&lo1=W_2_00_00&lo2=W_1_54_16.6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"get-images-by-coordinates",
+						""
+					],
+					"query": [
+						{
+							"key": null,
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "la1",
+							"value": "N_53_52_00"
+						},
+						{
+							"key": "la2",
+							"value": "N_54_0_00"
+						},
+						{
+							"key": "lo1",
+							"value": "W_2_00_00"
+						},
+						{
+							"key": "lo2",
+							"value": "W_1_54_16.6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/get-image/1667941308962-20190819_133544",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/get-image/1668157897849-00a0fef35c23bbafe12cef3e843d2d7.jpeg",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"get-image",
+						"1668157897849-00a0fef35c23bbafe12cef3e843d2d7.jpeg"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/get-images/",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/get-images/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"get-images",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/image-deletion/",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"forDeletion\": [\r\n\r\n\r\n    ]\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/image-deletion/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"image-deletion",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
