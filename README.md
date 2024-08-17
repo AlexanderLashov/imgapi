@@ -19,6 +19,8 @@ To run the application, simply execute the `run.sh` script in the root directory
 
 ## Testing
 
+### Test script
+
 There is a `test` folder that contains a single test image that can be used to test basic functionality. To run the test, ensure that the API is already running, navigate to the `test` folder, and execute the `test.sh` script:
 
 ```bash
@@ -27,6 +29,12 @@ cd test
 ```
 
 Please note that the test assumes that the API is already running.
+
+### HTTP Requests Collection
+
+The `HTTPrequests.postman_collection.json` file is a collection of HTTP requests exported from Postman.
+
+To use this collection, import it into Postman. You can then send the requests to the server to test the API endpoints.
 
 ## Frontend
 
