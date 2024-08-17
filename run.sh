@@ -47,9 +47,11 @@ if [ ! -f "$HTML_FILE_PATH" ]; then
   handle_error "HTML file not found at $HTML_FILE_PATH"
 fi
 
-echo "Opening the HTML file at $HTML_FILE_PATH..."
-xdg-open "$HTML_FILE_PATH" || handle_error "Failed to open HTML file"
-
+# Only try to open the web browser if not in a CI environment
+if [ -z "$CI" ]; then
+  echo "Opening the HTML file at $HTML_FILE_PATH..."
+  xdg-open "$HTML_FILE_PATH" || handle_error "Failed to open HTML file"
+fi
 echo "Setup complete. Your app is running and the HTML page should be open in your browser."
 
 tail -f app.log
